@@ -7,6 +7,6 @@ Set of useful server admin tools to be installed on servers.
 
 These are the commands to include in the user data script.
 
-    apt --assume-yes --quiet dist-upgrade
     apt --quiet update
+    apt --assume-yes --quiet dist-upgrade
     apt --assume-yes --quiet install ansible git
