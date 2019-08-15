@@ -1,0 +1,8 @@
+# This is used to be called for testing Ansible.  It should not be used
+# to actually change anything.
+---
+- hosts: "{{ target | default('no_hosts')}}"
+
+  tasks:
+    - name: Test by outputting a debug statement
+      debug: msg="Test debug message."
