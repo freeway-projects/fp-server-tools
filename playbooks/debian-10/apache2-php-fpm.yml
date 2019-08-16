@@ -1,0 +1,150 @@
+---
+- hosts: "{{ target | default('no_hosts')}}"
+  tasks:
+    - name: Add GPG key for the Sury package repo so different versions of PHP packages can be installed.
+      apt_key:
+        url: https://packages.sury.org/php/apt.gpg
+        keyring: /etc/apt/trusted.gpg.d/php.gpg
+        state: present
+    - name: Add the Sury repository to the apt sources.
+      apt_repository:
+        repo: deb https://packages.sury.org/php/ {{ ansible_facts['distribution_release'] }} main
+        state: present
+        filename: php
+    - name: Update and upgrade apt packages
+      apt:
+        update_cache: yes
+        upgrade: yes
+    - package:
+        name:
+          - apache2
+          - libapache2-mod-fcgid
+          - php5.6
+          - php5.6-common
+          - php5.6-fpm
+          - php5.6-gd
+          - php5.6-yaml
+          - php5.6-curl
+          - php5.6-cli
+          - php5.6-imap
+          - php5.6-json
+          - php5.6-mbstring
+          - php5.6-mcrypt
+          - php5.6-mysql
+          - php5.6-xml
+          - php5.6-soap
+          - php5.6-tidy
+          - php5.6-memcached
+          - php5.6-zip
+          - php7.0
+          - php7.0-common
+          - php7.0-fpm
+          - php7.0-gd
+          - php7.0-yaml
+          - php7.0-curl
+          - php7.0-cli
+          - php7.0-imap
+          - php7.0-json
+          - php7.0-mbstring
+          - php7.0-mcrypt
+          - php7.0-mysql
+          - php7.0-xml
+          - php7.0-soap
+          - php7.0-tidy
+          - php7.0-memcached
+          - php7.0-zip
+          - php7.1
+          - php7.1-common
+          - php7.1-fpm
+          - php7.1-gd
+          - php7.1-yaml
+          - php7.1-curl
+          - php7.1-cli
+          - php7.1-imap
+          - php7.1-json
+          - php7.1-mbstring
+          - php7.1-mcrypt
+          - php7.1-mysql
+          - php7.1-xml
+          - php7.1-soap
+          - php7.1-tidy
+          - php7.1-memcached
+          - php7.1-zip
+          - php7.2
+          - php7.2-common
+          - php7.2-fpm
+          - php7.2-gd
+          - php7.2-yaml
+          - php7.2-curl
+          - php7.2-cli
+          - php7.2-imap
+          - php7.2-json
+          - php7.2-mbstring
+          - php7.2-mysql
+          - php7.2-xml
+          - php7.2-soap
+          - php7.2-tidy
+          - php7.2-memcached
+          - php7.2-zip
+          - php
+          - php-common
+          - php-fpm
+          - php-gd
+          - php-yaml
+          - php-curl
+          - php-cli
+          - php-imap
+          - php-json
+          - php-mbstring
+          - php-mysql
+          - php-xml
+          - php-soap
+          - php-tidy
+          - php-memcached
+          - php-zip
+        state: present
+    - name: Increase PHP memory limit
+      lineinfile:
+        dest: /etc/php/5.6/fpm/php.ini
+        regexp: "memory_limit = "
+        line: "memory_limit = 512M"
+    - name: Increase PHP memory limit
+      lineinfile:
+        dest: /etc/php/7.0/fpm/php.ini
+        regexp: "memory_limit = "
+        line: "memory_limit = 512M"
+    - name: Increase PHP memory limit
+      lineinfile:
+        dest: /etc/php/7.1/fpm/php.ini
+        regexp: "memory_limit = "
+        line: "memory_limit = 512M"
+    - name: Increase PHP memory limit
+      lineinfile:
+        dest: /etc/php/7.2/fpm/php.ini
+        regexp: "memory_limit = "
+        line: "memory_limit = 512M"
+    - name: Increase PHP memory limit
+      lineinfile:
+        dest: /etc/php/7.3/fpm/php.ini
+        regexp: "memory_limit = "
+        line: "memory_limit = 512M"
+    - apache2_module:
+        state: present
+        name: actions
+        ignore_configcheck: True
+    - apache2_module:
+        state: present
+        name: fcgid
+        ignore_configcheck: True
+    - apache2_module:
+        state: present
+        name: alias
+        ignore_configcheck: True
+    - apache2_module:
+        state: present
+        name: proxy_fcgi
+        ignore_configcheck: True
+    - apache2_module:
+        state: present
+        name: rewrite
+        ignore_configcheck: True

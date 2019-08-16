@@ -6,3 +6,15 @@
   tasks:
     - name: Test by outputting a debug statement
       debug: msg="Test debug message."
+#      debug: msg="Test output message.  This is all the available ansible variables {{ ansible_facts['distribution_release'] }}"
+
+#    # Check the required variables have been set.
+#    - fail:
+#        msg: "The variable php_version needs to be set."
+#      when:  php_version is not defined
+
+
+#    - name: Check when has been set to a specific value.
+#      debug:
+#        msg: "Directory is 7.2 init"
+#      when: php_version == '7.2'

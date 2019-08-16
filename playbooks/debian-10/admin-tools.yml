@@ -5,10 +5,12 @@
   tasks:
     - package:
         name:
+          - php-elisp
+          - emacs-goodies-el
+          - yaml-mode
           - locate
           - mc
           - screen
-          - php-elisp
           - man
         state: present
     - name: Add default mc configuration to set lynx-like motion.
