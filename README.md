@@ -9,7 +9,7 @@ These are the commands to include in the user data script:
 
     apt --quiet update
     apt --assume-yes --quiet dist-upgrade
-    apt --assume-yes --quiet install ansible git python-apt
+    apt --assume-yes --quiet install ansible git python-apt apt-transport-https
     git clone https://github.com/freeway-projects/fp-server-tools.git /opt/fp-server-tools
 
 If it is required to be able to push changes to this repo back up then create an ssh key and upload the public key to your account at GitHub:
