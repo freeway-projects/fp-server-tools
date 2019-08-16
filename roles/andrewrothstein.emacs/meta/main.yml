@@ -1,0 +1,38 @@
+---
+galaxy_info:
+  author: Andrew Rothstein
+  description: emacs + some emacs goodies
+  company: BlackRock
+  license:
+    - MIT
+  min_ansible_version: 2.0
+  platforms:
+    - name: EL
+      versions:
+        - 7
+    - name: Fedora
+      versions:
+        - 23
+        - 24
+        - 25
+        - 26
+        - 27
+        - 28
+        - 29
+        - 30
+    - name: Debian
+      versions:
+        - jessie
+        - stretch
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+    - name: Alpine
+      versions:
+        - all
+
+  galaxy_tags:
+    - development
+
+dependencies: []

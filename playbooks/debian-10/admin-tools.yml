@@ -1,0 +1,39 @@
+---
+- hosts: "{{ target | default('no_hosts')}}"
+  roles:
+    - andrewrothstein.emacs
+  tasks:
+    - package:
+        name:
+          - locate
+          - mc
+          - screen
+          - php-elisp
+          - man
+        state: present
+    - name: Add default mc configuration to set lynx-like motion.
+      copy:
+        dest: "/usr/share/mc/mc.ini"
+        content: |
+          [Panels]
+          navigate_with_arrows=true
+    - name: Add settings to the global screen configuration file.
+      blockinfile:
+        dest: /etc/screenrc
+        block: |
+          # skip the startup message
+          startup_message off
+
+          # Display a caption string below, appearing like tabs and
+          # displaying the window number and application name (by default).
+          caption always
+          caption string "%{kw}%-w%{wr}%n %t%{-}%+w"
+          #
+          # Default screens
+          screen -t Screen1
+          screen -t Screen2
+          screen -t Screen3
+          screen -t Screen4
+          #
+          # Select first screen
+          select 0
