@@ -1,0 +1,99 @@
+#!/bin/bash
+if [ "$EUID" -ne 0 ]
+  then echo "This script needs to be run as root."
+  exit
+fi
+
+# -------------------------------------------------------------------------------------------------
+echo
+echo `date`
+echo "Adding user account ..."
+# -------------------------------------------------------------------------------------------------
+
+# Output a usage message - used when the parameters input are not correct.
+usage () {
+    echo "Usage: `basename "$0"` -n <user account name> -s <shell - bash/rbash> -r <assume root - yes/no>"
+}
+
+while getopts ":n:s:r:" opt; do
+    case $opt in
+        n)
+            USER_ACCOUNT_NAME=$OPTARG
+            ;;
+        s)
+            USER_SHELL=$OPTARG
+            ;;
+        r)
+            USER_ASSUME_ROOT=$OPTARG
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+            usage
+            exit 1
+            ;;
+        :)
+            echo "Option -$OPTARG requires an argument." >&2
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+# -------------------------------------------------------------------------------------------------
+echo
+echo `date`
+echo "Checking parameters ..."
+# -------------------------------------------------------------------------------------------------
+# Check required parameters have had values assigned.
+if [ -z $USER_ACCOUNT_NAME ] || [ -z $USER_SHELL ] || [ -z $USER_ASSUME_ROOT ]
+then
+    usage
+    exit 1
+fi
+
+
+# Check shell is set correctly.
+case $USER_SHELL in
+    bash|rbash)
+	echo "Shell is valid.";;
+    *)
+	echo "ERROR - The shell needs to be either bash or rbash."
+	usage
+	exit 1
+esac
+
+# Check shell is set correctly.
+case $USER_ASSUME_ROOT in
+    yes|no)
+	echo "Assume root value is valid.";;
+    *)
+	echo "ERROR - The assume root parameter needs to be either yes or no."
+	usage
+	exit 1
+esac
+
+# -------------------------------------------------------------------------------------------------
+echo
+echo `date`
+echo "Add a user account ..."
+# -------------------------------------------------------------------------------------------------
+ansible-playbook --extra-vars "target=localhost user_account_name=${USER_ACCOUNT_NAME} user_shell=${USER_SHELL}"  playbooks/debian-10/add-user-account.yml
+
+if [ ${USER_ASSUME_ROOT}="yes" ]; then
+
+    # -------------------------------------------------------------------------------------------------
+    echo
+    echo `date`
+    echo "Enabling the new user account to be able to run sudo without password ..."
+    # -------------------------------------------------------------------------------------------------
+    adduser --quiet ${USER_ACCOUNT_NAME} sudo
+    bash -c "echo \"${USER_ACCOUNT_NAME} ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/${USER_ACCOUNT_NAME}-user"
+    chmod 440 /etc/sudoers.d/${USER_ACCOUNT_NAME}-user
+fi
+
+# -------------------------------------------------------------------------------------------------
+echo
+echo `date`
+echo "Finished."
+# -------------------------------------------------------------------------------------------------
+exit 0

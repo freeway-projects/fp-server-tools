@@ -1,0 +1,15 @@
+---
+- hosts: "{{ target | default('no_hosts')}}"
+  tasks:
+    - fail:
+        msg: "The variable user_account_name needs to be set."
+      when:  user_account_name is not defined
+
+    - fail:
+        msg: "The variable user_account_name needs to be set."
+      when:  user_shell is not defined
+
+    - name: Add the developer account
+      user:
+        name: "{{ user_account_name }}"
+        shell: /bin/{{ user_shell }}
