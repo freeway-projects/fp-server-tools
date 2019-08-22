@@ -16,10 +16,10 @@ These are the commands to include in the user data script:
     apt --assume-yes --quiet install ansible git python-apt apt-transport-https
 
     # This is needed by Ansible to be able to run with the --check option.
-    apt --assume-yes --quiet install ansible git python-apt apt-transport-https
+    apt --assume-yes --quiet install python-apt
 
     # This is needed to be able to install apt packages from alternative sources.
-    apt --assume-yes --quiet install ansible git apt-transport-https
+    apt --assume-yes --quiet install apt-transport-https
 
     git clone https://github.com/freeway-projects/fp-server-tools.git /opt/fp-server-tools
 

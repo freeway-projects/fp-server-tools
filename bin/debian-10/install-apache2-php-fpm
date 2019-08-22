@@ -1,0 +1,7 @@
+#!/bin/bash
+# -------------------------------------------------------------------------------------------------
+echo
+echo `date`
+echo "Installing admin tools ..."
+# -------------------------------------------------------------------------------------------------
+ansible-playbook --extra-vars "target=localhost"  playbooks/debian-10/apache2-php-fpm.yml
