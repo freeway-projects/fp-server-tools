@@ -1,0 +1,20 @@
+<VirtualHost *:80>
+    ServerName {{ vhost_url }}
+
+    DocumentRoot /home/{{ web_app_user }}/web-apps/{{ web_app_name}}/src/web
+
+    ProxyPassMatch ^/(.*\.php(/.*)?)$ "unix:/var/run/php-fpm-{{ php_version }}-{{ web_app_name }}.sock|fcgi://localhost/home/{{ web_app_user }}/web-apps/{{ web_app_name }}/src/web"
+    # This is used to fix a problem with SimpleSAML where the PATH_INFO environment variable
+    # is not being set.  The $_SERVER['PATH_INFO'] needs to be set for the SimpleSAML code
+    # to work.
+#    SetEnvIf Request_URI "^" proxy-fcgi-pathinfo=first-dot    
+
+    <Directory /home/{{ web_app_user }}/web-apps/{{ web_app_name }}/src/web>
+        Options FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog /var/log/apache2/{{ web_app_name }}_error.log
+    CustomLog /var/log/apache2/{{ web_app_name }}_access.log combined
+</VirtualHost>

@@ -1,0 +1,27 @@
+[{{ web_app_name }}]
+
+; Use this variable to force reload even though it is a comment.
+;{{ ansible_date_time.iso8601_basic_short }}
+
+user = {{ web_app_user }}
+group = {{ web_app_user }}
+
+listen = /var/run/php-fpm-{{ php_version }}-{{ web_app_name }}.sock
+
+listen.owner = www-data
+listen.group = www-data
+listen.allowed_clients = 127.0.0.1
+
+pm = ondemand
+
+; Increased from the default value of 10.
+pm.max_children = 36
+
+pm.process_idle_timeout = 10s;
+
+;pm.max_requests = 500
+
+;php_flag[display_errors] = off
+;php_admin_value[error_log] = /var/log/fpm-php.www.log
+;php_admin_flag[log_errors] = on
+;php_admin_value[memory_limit] = 32M
