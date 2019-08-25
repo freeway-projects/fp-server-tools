@@ -1,0 +1,8 @@
+---
+- hosts: "{{ target | default('no_hosts')}}"
+  tasks:
+    - package:
+        name:
+          - mariadb-server
+          - mariadb-client
+        state: present
