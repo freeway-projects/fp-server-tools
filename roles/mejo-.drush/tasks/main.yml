@@ -1,0 +1,54 @@
+---
+
+- name: check if composer is available
+  stat:
+    path: "{{ apache2_php_composer_path|d('/usr/local/bin') }}/composer"
+  register: drupal_register_composer
+
+- fail:
+    msg: "Error: {{ apache2_php_composer_path|d('/usr/local/bin') }}/composer is required to install Drupal"
+  when: not drupal_register_composer.stat.executable|d()
+
+- name: install Drush dependencies
+  apt:
+    pkg: git
+    state: present
+
+- name: Clone Drush from GitHub
+  git:
+    repo: https://github.com/drush-ops/drush.git
+    dest: "{{ drush_install_path }}"
+    version: "{{ drush_version }}"
+    update: "{{ drush_keep_updated }}"
+
+- name: Install Drush with composer
+  composer:
+    command: install
+    working_dir: "{{ drush_install_path }}"
+    prefer_source: yes
+
+#- name: Install Drush dependencies with Composer
+#  command: "{{ drush_composer_path }} install --prefer-source --no-interaction"
+#  args:
+#    chdir: "{{ drush_install_path }}"
+#    creates: "{{ drush_install_path }}/vendor/autoload.php"
+
+- name: Create drush symlink
+  file:
+    src: "{{ drush_install_path }}/drush"
+    dest: "{{ drush_path }}"
+    state: link
+
+- name: Run drush command to finish setup
+  command: "{{ drush_path }}"
+  register: drush_result
+  changed_when: "'Execute a drush command' not in drush_result.stdout"
+
+- name: create cronjob to update drush
+  cron:
+    name: PHP drush update
+    minute: 0
+    hour: 5
+    user: root
+    job: "{{ apache2_php_composer_path|d('/usr/local/bin') }}/composer update --quiet --no-interaction --working-dir={{ drush_install_path }} --no-plugins --no-scripts"
+    cron_file: php-drush-update

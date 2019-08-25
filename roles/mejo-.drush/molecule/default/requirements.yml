@@ -1,0 +1,4 @@
+---
+- src: https://github.com/mejo-/ansible-role-php-composer.git
+  name: mejo-.php-composer
+

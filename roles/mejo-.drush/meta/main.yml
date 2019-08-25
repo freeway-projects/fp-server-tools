@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: Jonas Meurer
+  description: Install Drupal Drush on Debian
+  company: freesources.org
+  license: GPLv3
+  min_ansible_version: 2.2
+  galaxy_tags:
+    - drupal
+    - drush
+    - php
+  platforms:
+  - name: Debian
+    versions:
+      - jessie
+      - stretch
+  notifications:
+    webhooks: https://galaxy.ansible.com/api/v1/notifications/
