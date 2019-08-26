@@ -1,0 +1,127 @@
+#!/bin/bash
+if [ "$EUID" -ne 0 ]
+  then echo "Only run this script as root."
+  exit
+fi
+
+# -------------------------------------------------------------------------------------------------
+echo
+echo `date`
+echo "Create database and database user account."
+# -------------------------------------------------------------------------------------------------
+
+# Output a usage message - used when the parameters input are not correct.
+usage () {
+    echo "Usage: `basename "$0"` -n <database name> -u <database user name> -p <database user password> -o <overwrite existing database yes/no>"
+}
+
+# -------------------------------------------------------------------------------------------------
+# Testing parameter(s)
+# -------------------------------------------------------------------------------------------------
+while getopts ":n:u:v:p:o:" opt; do
+    case $opt in
+        n)
+            DATABASE_NAME=$OPTARG
+            ;;
+        u)
+            DATABASE_USER_NAME=$OPTARG
+            ;;
+        p)
+            DATABASE_USER_PASSWORD=$OPTARG
+            ;;
+        o)
+            OVERWRITE_EXISTING_DATABASE=$OPTARG
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+            usage
+            exit 1
+            ;;
+        :)
+            echo "Option -$OPTARG requires an argument." >&2
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+# Check required parameters have had values assigned.
+if [ -z $DATABASE_NAME ] || [ -z $DATABASE_USER_NAME ] || [ -z $DATABASE_USER_PASSWORD ] || [ -z $OVERWRITE_EXISTING_DATABASE ]
+then
+    usage
+    exit 1
+fi
+
+# -------------------------------------------------------------------------------------------------
+echo
+echo `date`
+echo "Checking parameters ..."
+# -------------------------------------------------------------------------------------------------
+if [ ${#DATABASE_NAME} -gt 32 ]
+then
+    echo "ERROR - The database name length has to be 32 characters or less."
+    usage
+    exit 1
+fi
+
+if [ ${#DATABASE_USER_NAME} -gt 32 ]
+then
+    echo "ERROR - The database user name length has to be 32 characters or less."
+    usage
+    exit 1
+fi
+
+#DATABASE_NAME="${DATABASE_NAME,,}"
+
+# Check parameters
+case $OVERWRITE_EXISTING_DATABASE in
+    yes|no)
+	;;
+    *)
+	usage
+	exit 1
+esac
+
+# -------------------------------------------------------------------------------------------------
+echo
+echo `date`
+echo "(Re)create database ..."
+# -------------------------------------------------------------------------------------------------
+# Check if database already exists and if it does has the flag been set to overwrite it.
+FOUND_DATABASE_NAME=$(mysql -s -N -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='${DATABASE_NAME}'")
+if [ ! -z "${FOUND_DATABASE_NAME}" ]; then
+
+    # Database exists.
+    case ${OVERWRITE_EXISTING_DATABASE} in
+	yes)
+	    # Database already exists and flag to overwrite is set to yes - so we will delete the current database.
+	    echo "Dropping database: " ${DATABASE_NAME}
+	    
+	    mysqladmin --force drop ${DATABASE_NAME}
+	    ;;
+	no)
+	    echo "Database ${DATABASE_NAME} already exists and flag is not set to overwrite so database creation is being aborted."
+	    exit 0
+	    ;;
+	*)
+	    echo "ERROR - The overwrite existing database switch (-o) needs to be set to 'yes' or 'no'."
+	    usage
+	    exit 1
+    esac
+fi
+
+mysqladmin create ${DATABASE_NAME}
+
+# -------------------------------------------------------------------------------------------------
+echo
+echo `date`
+echo "(Re)create database user ..."
+# -------------------------------------------------------------------------------------------------
+mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES ON \`${DATABASE_NAME}\`.* TO '${DATABASE_USER_NAME}'@'localhost' IDENTIFIED BY '${DATABASE_USER_PASSWORD}';" ${DATABASE_NAME}
+
+# -------------------------------------------------------------------------------------------------
+echo
+echo `date`
+echo "Finished."
+# -------------------------------------------------------------------------------------------------
+exit 0
