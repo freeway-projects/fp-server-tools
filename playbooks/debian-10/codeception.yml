@@ -1,0 +1,6 @@
+---
+- hosts: "{{ target | default('no_hosts')}}"
+#  remote_user: admin
+#  become: yes
+  roles:
+    - devsoul.codeception
