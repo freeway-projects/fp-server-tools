@@ -9,77 +9,43 @@
           - php7.2-xdebug
           - php-xdebug
         state: present
-#    - name: Increase PHP memory limit
-#      lineinfile:
-#        dest: /etc/php/7.1/mods-available/xdebug.ini
-#        line: "xdebug.remote_enable = 1"
 
-    - blockinfile: |
-        dest=/etc/php/5.6/mods-available/xdebug.ini
-        content="xdebug.remote_enable = 1
-            xdebug.remote_connect_back = 1
-            xdebug.remote_port = 9000"
+    - blockinfile:
+        path: /etc/php/5.6/mods-available/xdebug.ini
+        marker: "// {mark} ANSIBLE MANAGED BLOCK"
+        block: |
+          xdebug.remote_enable = 1
+          xdebug.remote_connect_back = 1
+          xdebug.remote_port = 9000
 
-    - blockinfile: |
-        dest=/etc/php/7.0/mods-available/xdebug.ini
-        content="xdebug.remote_enable = 1
-            xdebug.remote_connect_back = 1
-            xdebug.remote_port = 9000"
+    - blockinfile:
+        path: /etc/php/7.0/mods-available/xdebug.ini
+        marker: "// {mark} ANSIBLE MANAGED BLOCK"
+        block: |
+          xdebug.remote_enable = 1
+          xdebug.remote_connect_back = 1
+          xdebug.remote_port = 9000
 
-    - blockinfile: |
-        dest=/etc/php/7.1/mods-available/xdebug.ini
-        content="xdebug.remote_enable = 1
-            xdebug.remote_connect_back = 1
-            xdebug.remote_port = 9000"
+    - blockinfile:
+        path: /etc/php/7.1/mods-available/xdebug.ini
+        marker: "// {mark} ANSIBLE MANAGED BLOCK"
+        block: |
+          xdebug.remote_enable = 1
+          xdebug.remote_connect_back = 1
+          xdebug.remote_port = 9000
 
-    - blockinfile: |
-        dest=/etc/php/7.2/mods-available/xdebug.ini
-        content="xdebug.remote_enable = 1
-            xdebug.remote_connect_back = 1
-            xdebug.remote_port = 9000"
+    - blockinfile:
+        path: /etc/php/7.2/mods-available/xdebug.ini
+        marker: "// {mark} ANSIBLE MANAGED BLOCK"
+        block: |
+          xdebug.remote_enable = 1
+          xdebug.remote_connect_back = 1
+          xdebug.remote_port = 9000
 
-    - blockinfile: |
-        dest=/etc/php/7.3/mods-available/xdebug.ini
-        content="xdebug.remote_enable = 1
-            xdebug.remote_connect_back = 1
-            xdebug.remote_port = 9000"
-
-
-        
-
-#xdebug.remote_enable = 1
-#xdebug.remote_connect_back = 1
-#xdebug.remote_port = 9000
-
-        
-
-#/etc/php/5.6/mods-available/xdebug.ini
-
-        
-#    - name: Increase PHP memory limit
-#      lineinfile:
-#        dest: /etc/php/7.0/fpm/php.ini
-#        regexp: "memory_limit = "
-#        line: "memory_limit = 512M"
-#    - name: Increase PHP memory limit
-#      lineinfile:
-#        dest: /etc/php/7.1/fpm/php.ini
-#        regexp: "memory_limit = "
-#        line: "memory_limit = 512M"
-#    - name: Increase PHP memory limit
-#      lineinfile:
-#        dest: /etc/php/7.2/fpm/php.ini
-#        regexp: "memory_limit = "
-#        line: "memory_limit = 512M"
-#    - name: Increase PHP memory limit
-#      lineinfile:
-#        dest: /etc/php/7.3/fpm/php.ini
-#        regexp: "memory_limit = "
-#        line: "memory_limit = 512M"
-
-
-#    - name: Increase PHP memory limit
-#      lineinfile:
-#        dest: /etc/php/5.6/fpm/php.ini
-#        regexp: "memory_limit = "
-#        line: "memory_limit = 512M"
+    - blockinfile:
+        path: /etc/php/7.3/mods-available/xdebug.ini
+        marker: "// {mark} ANSIBLE MANAGED BLOCK"
+        block: |
+          xdebug.remote_enable = 1
+          xdebug.remote_connect_back = 1
+          xdebug.remote_port = 9000
