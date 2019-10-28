@@ -9,6 +9,8 @@ Set of useful server admin tools to be installed on servers.
 
 These are the commands to include in the user data script:
 
+    #!/bin/bash
+
     apt --quiet update
     apt --assume-yes --quiet dist-upgrade
 
