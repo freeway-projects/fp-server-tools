@@ -12,6 +12,7 @@
           - mc
           - screen
           - man
+          - awscli
         state: present
     - name: Add default mc configuration to set lynx-like motion.
       copy:
