@@ -13,6 +13,8 @@
           - screen
           - man
           - awscli
+          - certbot
+          - python-certbot-apache
         state: present
     - name: Add default mc configuration to set lynx-like motion.
       copy:
