@@ -15,6 +15,7 @@
           - awscli
           - certbot
           - python-certbot-apache
+          - ncdu
         state: present
     - name: Add default mc configuration to set lynx-like motion.
       copy:
