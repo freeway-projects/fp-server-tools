@@ -36,6 +36,7 @@
           - php5.6-tidy
           - php5.6-memcached
           - php5.6-zip
+          - php5.6-intl
           - php7.0
           - php7.0-common
           - php7.0-fpm
@@ -53,6 +54,7 @@
           - php7.0-tidy
           - php7.0-memcached
           - php7.0-zip
+          - php7.0-intl
           - php7.1
           - php7.1-common
           - php7.1-fpm
@@ -70,6 +72,7 @@
           - php7.1-tidy
           - php7.1-memcached
           - php7.1-zip
+          - php7.1-intl
           - php7.2
           - php7.2-common
           - php7.2-fpm
@@ -86,6 +89,7 @@
           - php7.2-tidy
           - php7.2-memcached
           - php7.2-zip
+          - php7.2-intl
           - php
           - php-common
           - php-fpm
@@ -102,6 +106,8 @@
           - php-tidy
           - php-memcached
           - php-zip
+          - php-intl
+          - php-apcu
         state: present
     - name: Increase PHP memory limit
       lineinfile:
