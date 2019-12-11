@@ -111,7 +111,7 @@ ansible-playbook --extra-vars "target=localhost web_app_name=${WEB_APP_NAME} web
 # -------------------------------------------------------------------------------------------------
 echo
 echo `date`
-echo "The web-app can be accessed at https://${VHOST_URL}"
+echo "The web-app can be accessed at http://${VHOST_URL}"
 echo "Finished building vhost."
 # -------------------------------------------------------------------------------------------------
 exit 0
