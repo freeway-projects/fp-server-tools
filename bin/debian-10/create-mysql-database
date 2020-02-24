@@ -96,7 +96,7 @@ if [ ! -z "${FOUND_DATABASE_NAME}" ]; then
 	yes)
 	    # Database already exists and flag to overwrite is set to yes - so we will delete the current database.
 	    echo "Dropping database: " ${DATABASE_NAME}
-	    
+
 	    mysqladmin --force drop ${DATABASE_NAME}
 	    ;;
 	no)

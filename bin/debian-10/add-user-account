@@ -77,7 +77,7 @@ echo
 echo `date`
 echo "Add a user account ..."
 # -------------------------------------------------------------------------------------------------
-ansible-playbook --extra-vars "target=localhost user_account_name=${USER_ACCOUNT_NAME} user_shell=${USER_SHELL}"  playbooks/debian-10/add-user-account.yml
+ansible-playbook --extra-vars "target=localhost user_account_name=${USER_ACCOUNT_NAME} user_shell=${USER_SHELL}"  /opt/fp-server-tools/playbooks/debian-10/add-user-account.yml
 
 if [ ${USER_ASSUME_ROOT} == "yes" ]; then
 

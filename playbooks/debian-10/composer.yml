@@ -1,0 +1,8 @@
+---
+- hosts: "{{ target | default('no_hosts')}}"
+
+  vars:
+    composer_keep_updated: true
+
+  roles:
+    - geerlingguy.composer

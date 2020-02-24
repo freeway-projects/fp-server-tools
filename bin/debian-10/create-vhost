@@ -106,7 +106,7 @@ echo "Run playbook to install web-app code ..."
 #PUBLIC_HOSTNAME_AND_DOMAIN=$(aws ec2 describe-tags --region=eu-west-2 --filters "Name=resource-id,Values=$(ec2metadata --instance-id)" --query 'Tags[?Key==`Name`].Value' --output text).ifoadev1.com
 #VHOST_SERVERNAME=${WEB_APP_NAME}.${PUBLIC_HOSTNAME_AND_DOMAIN}
 
-ansible-playbook --extra-vars "target=localhost web_app_name=${WEB_APP_NAME} web_app_user=${WEB_APP_USER} vhost_url=${VHOST_URL} php_version=${PHP_VERSION}" playbooks/debian-10/create-vhost.yml
+ansible-playbook --extra-vars "target=localhost web_app_name=${WEB_APP_NAME} web_app_user=${WEB_APP_USER} vhost_url=${VHOST_URL} php_version=${PHP_VERSION}" /opt/fp-server-tools/playbooks/debian-10/create-vhost.yml
 
 # -------------------------------------------------------------------------------------------------
 echo
