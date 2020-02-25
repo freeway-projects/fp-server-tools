@@ -11,72 +11,51 @@
         msg: "The variable web_app_user needs to be set."
       when:  web_app_user is not defined
 
-#    - fail:
-#        msg: "The variable vhost_url needs to be set."
-#      when:  vhost_url is not defined
-
-    - fail:
-        msg: "The variable php_version needs to be set."
-      when:  php_version is not defined
-
-    # Here we are creating the primary group for the web-app user.
-    # This is so that we can specify the exact gid value.  This gid
-    # (and the uid specified below) are used when mounting the EFS
-    # share which contains the web-app asset files.  The EFS share is
-    # mounted by the install-test/prod-web-apps scripts which adds an
-    # entry to /etc/fstab (to work after a reboot) and then mounts
-    # the share.
-#    - name: Add the primary group for the user with a specified gid
-#      group:
-#        name: "{{ web_app_user }}"
-#        gid: 2000
-
-    # We are spcifying the uid to make it consistent so it can be
-    # used by EFS when mounting the files/ directory.
-#    - name: Add the user account to hold the web application with a specified uid
-#      user:
-#        name: "{{ web_app_user }}"
-#        group: "{{ web_app_user }}"
-#        shell: /bin/bash
-#        uid: 2000
-
-    - name: Enable the site {{ web_app_name }} - and restart apache2
-      command: a2dissite {{ web_app_name }}
-      notify:
-          - restart apache2
-
-
     - name: Delete the directory holding the web-app code
       file:
         path: /home/{{ web_app_user }}/web-apps/{{ web_app_name }}
         state: absent
-#        owner: "{{ web_app_user }}"
-#        group: "{{ web_app_user }}"
-
-#    - name: Copy simple PHP file.
-#      template:
-#        src: /opt/fp-server-tools/templates/simple-php.j2
-#        dest: /home/{{ web_app_user }}/web-apps/{{ web_app_name }}/src/web/index.php
 
     # Note we are not restarting apache2 here as it will be restarted after enabling the site.
     - name: Delete vhost file
       file:
-#        src: /opt/fp-server-tools/templates/apache2-vhost.j2
         path: /etc/apache2/sites-available/{{ web_app_name }}.conf
         state: absent
 
-    - name: Delete the pool file - then restart the required version of php-fpm
+    - name: Disable the site by deleting the symlink
       file:
-#        src: /opt/fp-server-tools/templates/php-fpm-pool.j2
-        dest: /etc/php/{{ php_version }}/fpm/pool.d/{{ web_app_name }}.conf
+        path: /etc/apache2/sites-enabled/{{ web_app_name }}.conf
         state: absent
       notify:
-        - restart php{{ php_version }}-fpm
+          - restart apache2
 
+    - name: Delete the pool files then restart the required version of php-fpm
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - /etc/php/5.6/fpm/pool.d/{{ web_app_name }}.conf
+        - /etc/php/7.0/fpm/pool.d/{{ web_app_name }}.conf
+        - /etc/php/7.1/fpm/pool.d/{{ web_app_name }}.conf
+        - /etc/php/7.2/fpm/pool.d/{{ web_app_name }}.conf
+        - /etc/php/7.3/fpm/pool.d/{{ web_app_name }}.conf
+      notify:
+        - restart php5.6-fpm
+        - restart php7.0-fpm
+        - restart php7.1-fpm
+        - restart php7.2-fpm
+        - restart php7.3-fpm
 
   handlers:
     - name: restart apache2
       service: name=apache2 state=restarted
-
-    - name: restart php{{ php_version }}-fpm
-      service: name=php{{ php_version }}-fpm state=restarted
+    - name: restart php5.6-fpm
+      service: name=php5.6-fpm state=restarted
+    - name: restart php7.0-fpm
+      service: name=php7.0-fpm state=restarted
+    - name: restart php7.1-fpm
+      service: name=php7.1-fpm state=restarted
+    - name: restart php7.2-fpm
+      service: name=php7.2-fpm state=restarted
+    - name: restart php7.3-fpm
+      service: name=php7.3-fpm state=restarted

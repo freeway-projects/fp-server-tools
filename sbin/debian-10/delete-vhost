@@ -12,22 +12,19 @@ echo "Deleting vhost ..."
 
 # Output a usage message - used when the parameters input are not correct.
 usage () {
-    echo "Usage: `basename "$0"` -n <name of the web-app instance> -u <web-app user account> -p <php version to use - 5.6/7.1/7.2/7.3>"
+    echo "Usage: `basename "$0"` -n <name of the web-app instance> -u <web-app user account>"
 }
 
 # -------------------------------------------------------------------------------------------------
 # Testing parameter(s)
 # -------------------------------------------------------------------------------------------------
-while getopts ":n:u:v:p:" opt; do
+while getopts ":n:u:" opt; do
     case $opt in
         n)
             SUPPLIED_NAME=$OPTARG
             ;;
         u)
             WEB_APP_USER=$OPTARG
-            ;;
-        p)
-            PHP_VERSION=$OPTARG
             ;;
         \?)
             echo "Invalid option: -$OPTARG" >&2
@@ -43,9 +40,9 @@ while getopts ":n:u:v:p:" opt; do
 done
 
 # Check required parameters have had values assigned.
-if [ -z $SUPPLIED_NAME ] || [ -z $WEB_APP_USER ] || [ -z $VHOST_URL ] || [ -z $PHP_VERSION ]
+if [ -z $SUPPLIED_NAME ] || [ -z $WEB_APP_USER ]
 then
-    echo "The web-app name, web-app user and PHP version need to be provided as parameters on the command line."
+    echo "The web-app name and web-app user need to be provided as parameters on the command line."
     usage
     exit 1
 fi
@@ -75,35 +72,12 @@ fi
 # database name/username and as a vhost name.
 WEB_APP_NAME="${WEB_APP_NAME,,}"
 
-# Check if the site exists.
-if [ ! -e /etc/apache2/sites-available/${WEB_APP_NAME}.conf ]
-then
-    echo "ERROR - The web-app name ${WEB_APP_NAME} does not exist."
-    usage
-    exit 1
-fi
-
-# Check PHP version is set correctly.
-case $PHP_VERSION in
-    5.6|7.1|7.2|7.3)
-	echo "PHP version is valid.";;
-    *)
-	echo "ERROR - The PHP version needs to be either 7.1, 7.2 or 7.3."
-	usage
-	exit 1
-esac
-
 # -------------------------------------------------------------------------------------------------
 echo
 echo `date`
-echo "Run playbook to install web-app code ..."
+echo "Run playbook to delete vhost and web-app code ..."
 # -------------------------------------------------------------------------------------------------
-#PUBLIC_IP=$(ec2metadata --public-ip)
-#PUBLIC_HOSTNAME_AND_DOMAIN=$(ec2metadata --public-hostname)
-#PUBLIC_HOSTNAME_AND_DOMAIN=$(aws ec2 describe-tags --region=eu-west-2 --filters "Name=resource-id,Values=$(ec2metadata --instance-id)" --query 'Tags[?Key==`Name`].Value' --output text).ifoadev1.com
-#VHOST_SERVERNAME=${WEB_APP_NAME}.${PUBLIC_HOSTNAME_AND_DOMAIN}
-
-ansible-playbook --extra-vars "target=localhost web_app_name=${WEB_APP_NAME} web_app_user=${WEB_APP_USER} php_version=${PHP_VERSION}" /opt/fp-server-tools/playbooks/debian-10/delete-vhost.yml
+ansible-playbook --extra-vars "target=localhost web_app_name=${WEB_APP_NAME} web_app_user=${WEB_APP_USER}" /opt/fp-server-tools/playbooks/debian-10/delete-vhost.yml
 
 # -------------------------------------------------------------------------------------------------
 echo
