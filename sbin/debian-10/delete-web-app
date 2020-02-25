@@ -82,6 +82,14 @@ ansible-playbook --extra-vars "target=localhost web_app_name=${WEB_APP_NAME} web
 # -------------------------------------------------------------------------------------------------
 echo
 echo `date`
+echo "Delete database user and database ..."
+# -------------------------------------------------------------------------------------------------
+mysql -e "DROP USER '${WEB_APP_NAME}'@'localhost';" ${DATABASE_NAME}
+mysqladmin --force drop ${WEB_APP_NAME}
+
+# -------------------------------------------------------------------------------------------------
+echo
+echo `date`
 echo "Finished - the web-app ${WEB_APP_NAME} has been deleted."
 # -------------------------------------------------------------------------------------------------
 exit 0
