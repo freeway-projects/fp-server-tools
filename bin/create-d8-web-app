@@ -2,26 +2,27 @@
 
 echo $(date)
 echo "Create vhost ..."
-sudo /opt/fp-server-tools/bin/debian-10/create-vhost -n test-media -u kbailey -v test-media.hunter1.freeway-projects.co.uk -p 7.2
+sudo /opt/fp-server-tools/sbin/debian-10/create-vhost -n test-media-2 -u kbailey -v test-media-2.hunter1.freeway-projects.co.uk -p 7.2
 
 echo $(date)
 echo "Create database ..."
-sudo /opt/fp-server-tools/bin/debian-10/create-mysql-database -n test-media -u test-media -p debreent -o yes
+sudo /opt/fp-server-tools/sbin/debian-10/create-mysql-database -n test-media-2 -u test-media-2 -p debreent -o yes
 
 echo $(date)
 echo "Get Drupal files ..."
-rm -rf /home/kbailey/web-apps/test-media/src/web
-composer create-project drupal/drupal /home/kbailey/web-apps/test-media/src/web
+rm -rf /home/kbailey/web-apps/test-media-2/src
+composer create-project drupal/recommended-project /home/kbailey/web-apps/test-media-2/src
 
 echo $(date)
 echo "Install drupal console ..."
-#cd /home/kbailey/web-apps/test-media/src/web
-composer require --working-dir=/home/kbailey/web-apps/test-media/src/web drupal/console:~1.0 --prefer-dist --optimize-autoloader
+#cd /home/kbailey/web-apps/test-media-2/src/web
+composer require --working-dir=/home/kbailey/web-apps/test-media-2/src drupal/console:~1.0 --prefer-dist --optimize-autoloader
 
 echo $(date)
 echo "Install Drupal ..."
-/home/kbailey/web-apps/test-media/src/web/vendor/bin/drupal --root=/home/kbailey/web-apps/test-media/src/web site:install standard --langcode="en" --db-type="mysql" --db-host="127.0.0.1" --db-name="test-media" --db-user="test-media" --db-pass="debreent" --db-port="3306" --site-name="test-media" --site-mail="admin@example.com" --account-name="admin" --account-mail="admin@example.com" --account-pass="admin" --no-interaction
-/home/kbailey/web-apps/test-media/src/web/vendor/bin/drupal --root=/home/kbailey/web-apps/test-media/src/web cr all
+/home/kbailey/web-apps/test-media-2/src/vendor/bin/drupal --root=/home/kbailey/web-apps/test-media-2/src/web site:install standard --langcode="en" --db-type="mysql" --db-host="127.0.0.1" --db-name="test-media-2" --db-user="test-media-2" --db-pass="debreent" --db-port="3306" --site-name="test-media-2" --site-mail="admin@example.com" --account-name="admin" --account-mail="admin@example.com" --account-pass="admin" --no-interaction
+#/home/kbailey/web-apps/test-media-2/src/web/vendor/bin/drupal --root=/home/kbailey/web-apps/test-media-2/src/web site:install standard --langcode="en" --db-type="mysql" --db-host="127.0.0.1" --db-name="test-media-2" --db-user="test-media-2" --db-pass="debreent" --db-port="3306" --site-name="test-media-2" --site-mail="admin@example.com" --account-name="admin" --account-mail="admin@example.com" --account-pass="admin" --no-interaction
+/home/kbailey/web-apps/test-media-2/src/vendor/bin/drupal --root=/home/kbailey/web-apps/test-media-2/src/web cr all
 
 echo $(date)
 echo "Finished."
