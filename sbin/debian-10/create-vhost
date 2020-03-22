@@ -6,7 +6,7 @@ fi
 
 # Output a usage message - used when the parameters input are not correct.
 usage () {
-    echo "Usage: `basename "$0"` -n <name of the new web-app instance - db name, vhost name, etc> -u <web-app user account> -v <vhost url> -p <php version to use - 5.6/7.1/7.2/7.3>"
+    echo "Usage: `basename "$0"` -n <name of the new web-app instance - db name, vhost name, etc> -u <web-app user account> -v <vhost url> -p <php version to use - 5.6/7.1/7.2/7.3/7.4>"
 }
 
 # -------------------------------------------------------------------------------------------------
@@ -82,10 +82,10 @@ fi
 
 # Check PHP version is set correctly.
 case $PHP_VERSION in
-    5.6|7.1|7.2|7.3)
+    5.6|7.1|7.2|7.3|7.4)
 	echo "PHP version is valid.";;
     *)
-	echo "ERROR - The PHP version needs to be either 7.1, 7.2 or 7.3."
+	echo "ERROR - The PHP version needs to be either 7.1, 7.2,7.3 or 7.4."
 	usage
 	exit 1
 esac
